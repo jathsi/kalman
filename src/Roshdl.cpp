@@ -19,7 +19,7 @@ void Roshdl::split(unsigned int p_t1, unsigned int p_t2) {
   int y1 = ys[p_t1];
   int x2 = xs[p_t2];
   int y2 = ys[p_t2];
-  double dist,dist_max=0.5,part1=1,part2=1;
+  double dist,dist_max=0.1,part1=1,part2=1;
   int i_max=0;
 
    for (std::size_t i = p_t1+1; i < p_t2; ++i)
@@ -42,7 +42,7 @@ void Roshdl::split(unsigned int p_t1, unsigned int p_t2) {
  
 
   }
-  if (dist_max>0.5&&!isinf(dist_max)){
+  if (dist_max>0.1&&!isinf(dist_max)){
     ROS_DEBUG("splitpoint %d %f",i_max,dist_max);
 
     split(p_t1,i_max-1);
