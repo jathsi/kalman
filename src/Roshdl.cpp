@@ -15,11 +15,11 @@
 void Roshdl::split(unsigned int p_t1, unsigned int p_t2) {
  
   double slope,angle_,radius_ ;
-  int x1 = xs[p_t1];
-  int y1 = ys[p_t1];
-  int x2 = xs[p_t2];
-  int y2 = ys[p_t2];
-  double dist,dist_max=0.9,part1=1,part2=1;
+  double x1 = xs[p_t1];
+  double y1 = ys[p_t1];
+  double x2 = xs[p_t2];
+  double y2 = ys[p_t2];
+  double dist,dist_max=0.25,part1=1,part2=1;
   int i_max=0;
 
    for (std::size_t i = p_t1+1; i < p_t2; ++i)
@@ -28,9 +28,14 @@ void Roshdl::split(unsigned int p_t1, unsigned int p_t2) {
 
     //dist = double((abs(fabs(((y2-y1)*xs[i])))-fabs(((x2-x1)*ys[i]))+fabs((x2*y1))-fabs((x1*y2)))/sqrt(fabs((pow((y2-y1),2)))+fabs(pow((x2-x1),2))));
 
-    part1=fabs(abs(((y2-y1)*xs[i])-((x2-x1)*ys[i])+(x2*y1)-(x1*y2)));
-    part2=fabs(sqrt(fabs((pow((y2-y1),2)))+fabs(pow((x2-x1),2))));
-    dist = fabs(part1/part2);
+    //part1=fabs(abs(((y2-y1)*xs[i])-((x2-x1)*ys[i])+(x2*y1)-(x1*y2)));
+    //part2=fabs(sqrt(fabs((pow((y2-y1),2)))+fabs(pow((x2-x1),2))));
+    //dist = fabs(part1/part2);
+
+
+    part1=abs(((y2-y1)*xs[i])-((x2-x1)*ys[i])+(x2*y1)-(x1*y2));
+    part2=sqrt((pow((y2-y1),2))+pow((x2-x1),2));
+    dist = part1/part2;
 
     if (dist > dist_max)
     {
@@ -42,8 +47,8 @@ void Roshdl::split(unsigned int p_t1, unsigned int p_t2) {
  
 
   }
-  if (dist_max>0.9&&!isinf(dist_max)){
-    ROS_DEBUG("splitpoint %d %f",i_max,dist_max);
+  if (dist_max>0.25&&!isinf(dist_max)){
+    ROS_DEBUG("splitpoint %d %f (%f, %f),(%f,%f),(%f,%f)",i_max,dist_max,x1,y1,x2,y2,xs[i_max],ys[i_max]);
 
     split(p_t1,i_max-1);
     split(i_max,p_t2);
@@ -93,7 +98,6 @@ void Roshdl::ScanarrivalFn(const sensor_msgs::LaserScan::ConstPtr &scan_msg)
   std::vector<unsigned int> indices;
   unsigned int i = 0;
   bearings.clear();
-    cos_bearings.clear();
     cos_bearings.clear();
     sin_bearings.clear();
     indices.clear();
@@ -161,7 +165,7 @@ void Roshdl::ScanarrivalFn(const sensor_msgs::LaserScan::ConstPtr &scan_msg)
   line_list.id=1;
   points.type=visualization_msgs::Marker::POINTS;
   line_list.type=visualization_msgs::Marker::LINE_LIST;
-  line_list.scale.x=0.5;
+  line_list.scale.x=0.2;
   line_list.color.r=1.0;
   line_list.color.a=1;
   points.color.g=1.0f;
@@ -267,13 +271,13 @@ std::sort(kbs.begin(),kbs.end());
  for (std::vector<unsigned int>::const_iterator cit0 = kbs.begin(); cit0 != kbs.end(); ++cit0)
  {
 
-if((*(cit0+1)-*cit0)>5 && *cit0!=719) {
+if((*(cit0+1)-*cit0)>3 && *cit0!=719) {
   //find radius _angle 
- if (!isinf(Ranges[*cit0+6])){
+ if (!isinf(Ranges[*cit0+1])){
     //ROS_DEBUG("Before segmentation %d %d",*cit0,*(cit0+1));
 
   split(*cit0,*(cit0+1));
-}
+ }
 }
 
  }
