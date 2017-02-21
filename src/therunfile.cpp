@@ -1,8 +1,6 @@
 /**
  * Test for the KalmanFilter class with 1D projectile motion.
- *
- * @author: Hayk Martirosyan
- * @date: 2014.11.15
+ 
  */
 #include <ros/ros.h>
 #include <iostream>
