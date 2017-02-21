@@ -1,6 +1,5 @@
 /**
- * Test for the KalmanFilter class with 1D projectile motion.
- 
+The run file 
  */
 #include <ros/ros.h>
 #include <iostream>
